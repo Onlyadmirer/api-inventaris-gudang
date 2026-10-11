@@ -38,6 +38,10 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
     },
     {
       requireAuth: true,
-      detail: { summary: 'Profil user yang sedang login (UC-01)', tags: ['Auth'] },
+      detail: {
+        summary: 'Profil user yang sedang login (UC-01)',
+        tags: ['Auth'],
+        security: [{ bearerAuth: [] }],
+      },
     },
   )

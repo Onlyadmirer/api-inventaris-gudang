@@ -22,7 +22,11 @@ export const userRoutes = new Elysia({ prefix: '/users' })
     {
       query: listUsersQuery,
       requireRole: ['ADMIN'],
-      detail: { summary: 'Daftar akun pengguna (UC-02)', tags: ['Users'] },
+      detail: {
+        summary: 'Daftar akun pengguna (UC-02)',
+        tags: ['Users'],
+        security: [{ bearerAuth: [] }],
+      },
     },
   )
   .post(
@@ -42,7 +46,11 @@ export const userRoutes = new Elysia({ prefix: '/users' })
     {
       body: createUserBody,
       requireRole: ['ADMIN'],
-      detail: { summary: 'Tambah akun pengguna (UC-02)', tags: ['Users'] },
+      detail: {
+        summary: 'Tambah akun pengguna (UC-02)',
+        tags: ['Users'],
+        security: [{ bearerAuth: [] }],
+      },
     },
   )
   .patch(
@@ -71,7 +79,11 @@ export const userRoutes = new Elysia({ prefix: '/users' })
       params: userIdParams,
       body: updateUserBody,
       requireRole: ['ADMIN'],
-      detail: { summary: 'Ubah akun pengguna (UC-02)', tags: ['Users'] },
+      detail: {
+        summary: 'Ubah akun pengguna (UC-02)',
+        tags: ['Users'],
+        security: [{ bearerAuth: [] }],
+      },
     },
   )
   .patch(
@@ -91,6 +103,10 @@ export const userRoutes = new Elysia({ prefix: '/users' })
       params: userIdParams,
       body: setUserStatusBody,
       requireRole: ['ADMIN'],
-      detail: { summary: 'Aktifkan/nonaktifkan akun (UC-02)', tags: ['Users'] },
+      detail: {
+        summary: 'Aktifkan/nonaktifkan akun (UC-02)',
+        tags: ['Users'],
+        security: [{ bearerAuth: [] }],
+      },
     },
   )

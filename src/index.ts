@@ -17,6 +17,11 @@ export const app = new Elysia({ prefix: '/api' })
       path: '/openapi',
       documentation: {
         info: { title: 'Sistem Kelola Gudang API', version: '0.1.0' },
+        components: {
+          securitySchemes: {
+            bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+          },
+        },
       },
     }),
   )
