@@ -3,11 +3,15 @@ import { openapi } from '@elysiajs/openapi'
 import { sql } from 'drizzle-orm'
 import { db } from './db'
 import { errorPlugin } from './plugins/error'
+import { authRoutes } from './modules/auth/routes'
+import { userRoutes } from './modules/users/routes'
 
 const port = Number(process.env.PORT ?? 3000)
 
 export const app = new Elysia({ prefix: '/api' })
   .use(errorPlugin)
+  .use(authRoutes)
+  .use(userRoutes)
   .use(
     openapi({
       path: '/openapi',
