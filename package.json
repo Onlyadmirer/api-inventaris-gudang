@@ -1,0 +1,38 @@
+{
+  "name": "inventaris-gudang-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "bun run src/db/migrate.ts",
+    "db:push": "drizzle-kit push",
+    "db:seed": "bun run src/db/seed.ts",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@elysiajs/jwt": "^1.4.2",
+    "@elysiajs/openapi": "^1.4.16",
+    "croner": "^10.0.1",
+    "drizzle-orm": "^0.45.4",
+    "elysia": "^1.4.30",
+    "exceljs": "^4.4.0",
+    "nodemailer": "^10.0.16",
+    "pdfkit": "^0.20.2",
+    "postgres": "^3.4.9",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.2",
+    "@types/nodemailer": "^8.0.2",
+    "@types/pdfkit": "^0.17.6",
+    "@types/qrcode": "^1.5.6",
+    "dotenv": "^18.0.6",
+    "drizzle-kit": "^0.31.11",
+    "typescript": "^7.0.2"
+  }
+}
