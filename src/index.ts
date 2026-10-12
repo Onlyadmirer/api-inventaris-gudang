@@ -5,6 +5,9 @@ import { db } from './db'
 import { errorPlugin } from './plugins/error'
 import { authRoutes } from './modules/auth/routes'
 import { userRoutes } from './modules/users/routes'
+import { categoryRoutes } from './modules/categories/routes'
+import { locationRoutes } from './modules/locations/routes'
+import { itemRoutes } from './modules/items/routes'
 
 const port = Number(process.env.PORT ?? 3000)
 
@@ -12,6 +15,9 @@ export const app = new Elysia({ prefix: '/api' })
   .use(errorPlugin)
   .use(authRoutes)
   .use(userRoutes)
+  .use(categoryRoutes)
+  .use(locationRoutes)
+  .use(itemRoutes)
   .use(
     openapi({
       path: '/openapi',
