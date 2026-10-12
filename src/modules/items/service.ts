@@ -1,5 +1,6 @@
-import { and, asc, eq, ilike, ne, or, sql, type SQL } from 'drizzle-orm'
+import { and, asc, eq, ilike, inArray, ne, or, sql, type SQL } from 'drizzle-orm'
 import { db } from '../../db'
+import { generateQrDataUrl } from '../../lib/qr'
 import {
   categories,
   items,
@@ -250,4 +251,42 @@ export async function deleteItem(id: number): Promise<ItemResponse> {
 
   await db.delete(items).where(eq(items.id_barang, id))
   return existing
+}
+
+export type ItemQrResponse = {
+  data_url: string
+  barang: ItemResponse
+}
+
+export async function getItemQr(id: number): Promise<ItemQrResponse> {
+  const barang = await getItemById(id)
+  const data_url = await generateQrDataUrl(barang.kode_barang)
+  await db.update(items).set({ qr_code: barang.kode_barang }).where(eq(items.id_barang, id))
+  return { data_url, barang }
+}
+
+export async function getItemsQrBatch(ids: number[]): Promise<{ data: ItemQrResponse[] }> {
+  const uniqueIds = [...new Set(ids)]
+
+  const rows = await joinedItems().where(inArray(items.id_barang, uniqueIds))
+  if (rows.length !== uniqueIds.length) throw new AppError(404, 'Barang tidak ditemukan')
+
+  const data = await Promise.all(
+    rows.map(async (row) => {
+      const barang = toItemResponse(row.item, row.kategori, row.lokasi)
+      const data_url = await generateQrDataUrl(barang.kode_barang)
+      return { data_url, barang }
+    }),
+  )
+
+  await Promise.all(
+    data.map((entry) =>
+      db
+        .update(items)
+        .set({ qr_code: entry.barang.kode_barang })
+        .where(eq(items.id_barang, entry.barang.id_barang)),
+    ),
+  )
+
+  return { data }
 }

@@ -7,6 +7,7 @@ import {
   itemIdParams,
   listItemsQuery,
   minStockBody,
+  qrBatchBody,
   updateItemBody,
 } from './model'
 import {
@@ -14,6 +15,8 @@ import {
   deleteItem,
   getItemByCode,
   getItemById,
+  getItemQr,
+  getItemsQrBatch,
   listItems,
   updateItem,
   updateMinStock,
@@ -50,6 +53,51 @@ export const itemRoutes = new Elysia({ prefix: '/items' })
       requireAuth: true,
       detail: {
         summary: 'Detail barang berdasarkan kode/SKU (UC-09)',
+        tags: ['Items'],
+        security: [{ bearerAuth: [] }],
+      },
+    },
+  )
+  .get(
+    '/:id/qr',
+    async ({ params, authUser, server, request }) => {
+      const result = await getItemQr(params.id)
+      await logActivity({
+        user_id: authUser!.id_user,
+        aksi: 'item.qr_generate',
+        entitas_terkait: 'items',
+        entitas_id: params.id,
+        ip_address: clientIp(server, request),
+      })
+      return result
+    },
+    {
+      params: itemIdParams,
+      requireRole: ['ADMIN', 'KEPALA_GUDANG'],
+      detail: {
+        summary: 'Generate QR code barang (UC-05)',
+        tags: ['Items'],
+        security: [{ bearerAuth: [] }],
+      },
+    },
+  )
+  .post(
+    '/qr/batch',
+    async ({ body, authUser, server, request }) => {
+      const result = await getItemsQrBatch(body.id_barang)
+      await logActivity({
+        user_id: authUser!.id_user,
+        aksi: 'item.qr_batch',
+        entitas_terkait: 'items',
+        ip_address: clientIp(server, request),
+      })
+      return result
+    },
+    {
+      body: qrBatchBody,
+      requireRole: ['ADMIN', 'KEPALA_GUDANG'],
+      detail: {
+        summary: 'Generate QR code massal (UC-05)',
         tags: ['Items'],
         security: [{ bearerAuth: [] }],
       },

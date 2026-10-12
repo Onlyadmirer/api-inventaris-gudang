@@ -38,3 +38,7 @@ export const updateItemBody = t.Object({
 export const minStockBody = t.Object({
   batas_stok_minimum: t.Integer({ minimum: 0 }),
 })
+
+export const qrBatchBody = t.Object({
+  id_barang: t.Array(t.Integer({ minimum: 1 }), { minItems: 1 }),
+})
