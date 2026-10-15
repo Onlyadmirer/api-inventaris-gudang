@@ -107,8 +107,17 @@ describe('UC-05 QR massal', () => {
     expect(res.status).toBe(403)
   })
 
-  it('KEPALA_GUDANG -> 200 untuk banyak barang + tersimpan', async () => {
+  it('KEPALA_GUDANG -> 403', async () => {
     const token = await tokenFor('kepala@inventaris.test')
+    const res = await request('POST', '/items/qr/batch', {
+      token,
+      body: { id_barang: [itemA.id_barang] },
+    })
+    expect(res.status).toBe(403)
+  })
+
+  it('ADMIN -> 200 untuk banyak barang + tersimpan', async () => {
+    const token = await tokenFor('admin@inventaris.test')
     const res = await request('POST', '/items/qr/batch', {
       token,
       body: { id_barang: [itemA.id_barang, itemB.id_barang] },

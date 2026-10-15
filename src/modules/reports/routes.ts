@@ -31,7 +31,7 @@ export const reportRoutes = new Elysia({ prefix: '/reports' })
       requireRole: ['ADMIN', 'KEPALA_GUDANG'],
       detail: {
         summary: 'Ekspor laporan PDF/Excel (UC-14)',
-        tags: ['Reports'],
+        tags: ['Admin', 'Kepala Gudang'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -56,7 +56,7 @@ export const reportRoutes = new Elysia({ prefix: '/reports' })
       requireRole: ['ADMIN', 'KEPALA_GUDANG'],
       detail: {
         summary: 'Laporan stok/transaksi/opname JSON (UC-14)',
-        tags: ['Reports'],
+        tags: ['Admin', 'Kepala Gudang'],
         security: [{ bearerAuth: [] }],
       },
     },

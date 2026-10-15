@@ -44,6 +44,13 @@ export const app = new Elysia({ prefix: '/api' })
           description:
             'Backend inventaris gudang: auth & user, master data, QR, transaksi stok, opname, dashboard, laporan, notifikasi, dan penjadwalan laporan.',
         },
+        tags: [
+          { name: 'Publik', description: 'Endpoint tanpa autentikasi' },
+          { name: 'Semua', description: 'Endpoint untuk semua role terautentikasi' },
+          { name: 'Admin', description: 'ADMIN' },
+          { name: 'Kepala Gudang', description: 'KEPALA_GUDANG' },
+          { name: 'Staf Gudang', description: 'STAF_GUDANG' },
+        ],
         components: {
           securitySchemes: {
             bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
@@ -58,7 +65,7 @@ export const app = new Elysia({ prefix: '/api' })
       await db.execute(sql`select 1`)
       return { status: 'ok' }
     },
-    { detail: { summary: 'Health check', tags: ['System'] } },
+    { detail: { summary: 'Health check', tags: ['Publik'] } },
   )
 
 if (import.meta.main) {

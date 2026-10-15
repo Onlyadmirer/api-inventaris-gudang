@@ -90,7 +90,7 @@ Semua endpoint ber-prefix `/api`. Detail lengkap ada di `docs/api-spec.md` dan O
 |---|---|---|
 | Auth | `POST /auth/login`, `GET /auth/me` | publik / semua |
 | Users | `GET/POST /users`, `PATCH /users/:id`, `PATCH /users/:id/status` | ADMIN |
-| Categories / Locations | CRUD | GET semua, mutasi A,K |
+| Categories / Locations | CRUD | GET semua, mutasi A |
 | Items | `GET /items`, `GET /items/:id`, `GET /items/by-code/:kode`, CRUD, `PATCH /items/:id/min-stock`, `GET /items/:id/qr`, `POST /items/qr/batch` | lihat api-spec |
 | Transactions | `POST /transactions/masuk`, `POST /transactions/keluar`, `GET /transactions` | S (POST); A,K,S (GET, staf milik sendiri) |
 | Opnames | `POST/GET /opnames`, `GET /opnames/:id`, `POST /opnames/:id/details`, `POST /opnames/:id/finalize` | K,S (finalize: K) |
@@ -98,7 +98,7 @@ Semua endpoint ber-prefix `/api`. Detail lengkap ada di `docs/api-spec.md` dan O
 | Reports | `GET /reports/:jenis`, `GET /reports/:jenis/export?format=pdf\|xlsx` | A,K |
 | Preferences | `GET/PUT /preferences` | K |
 | Notifications | `GET /notifications`, `PATCH /notifications/:id/read`, `PATCH /notifications/read-all` | A,K |
-| Schedules | `GET/POST /schedules`, `PATCH/DELETE /schedules/:id` | K |
+| Schedules | `GET/POST /schedules`, `PATCH/DELETE /schedules/:id` | A |
 | Audit | `GET /audit-logs`, `GET /notification-logs` | A |
 
 Paginasi standar: `?page=1&limit=20` → `{ data: [], meta: { page, limit, total } }`.

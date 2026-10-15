@@ -22,7 +22,7 @@ export const transactionRoutes = new Elysia({ prefix: '/transactions' })
       requireRole: ['ADMIN', 'KEPALA_GUDANG', 'STAF_GUDANG'],
       detail: {
         summary: 'Daftar transaksi stok (filter tanggal/jenis, staf hanya miliknya)',
-        tags: ['Transactions'],
+        tags: ['Semua'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -54,7 +54,7 @@ export const transactionRoutes = new Elysia({ prefix: '/transactions' })
       requireRole: ['STAF_GUDANG'],
       detail: {
         summary: 'Barang masuk (UC-10, UC-12)',
-        tags: ['Transactions'],
+        tags: ['Staf Gudang'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -86,7 +86,7 @@ export const transactionRoutes = new Elysia({ prefix: '/transactions' })
       requireRole: ['STAF_GUDANG'],
       detail: {
         summary: 'Barang keluar (UC-11, UC-12)',
-        tags: ['Transactions'],
+        tags: ['Staf Gudang'],
         security: [{ bearerAuth: [] }],
       },
     },

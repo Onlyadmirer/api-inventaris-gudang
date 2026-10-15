@@ -52,8 +52,17 @@ describe('UC-03 Lokasi', () => {
     expect(res.status).toBe(403)
   })
 
-  it('KEPALA_GUDANG menambah lokasi -> 201 + tercatat', async () => {
+  it('KEPALA_GUDANG tidak boleh menambah lokasi -> 403', async () => {
     const token = await tokenFor('kepala@inventaris.test')
+    const res = await request('POST', '/locations', {
+      token,
+      body: { nama_rak: `Rak Ditolak ${suffix}` },
+    })
+    expect(res.status).toBe(403)
+  })
+
+  it('ADMIN menambah lokasi -> 201 + tercatat', async () => {
+    const token = await tokenFor('admin@inventaris.test')
     const res = await request('POST', '/locations', {
       token,
       body: { nama_rak: `Rak Uji ${suffix}`, keterangan: 'uji' },

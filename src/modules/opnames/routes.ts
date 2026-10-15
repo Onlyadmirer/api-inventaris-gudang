@@ -28,7 +28,7 @@ export const opnameRoutes = new Elysia({ prefix: '/opnames' })
       requireRole: [...ROLES_OPNAME],
       detail: {
         summary: 'Daftar sesi stok opname (UC-15)',
-        tags: ['Opnames'],
+        tags: ['Kepala Gudang', 'Staf Gudang'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -54,7 +54,7 @@ export const opnameRoutes = new Elysia({ prefix: '/opnames' })
       requireRole: [...ROLES_OPNAME],
       detail: {
         summary: 'Buat sesi stok opname draft (UC-15)',
-        tags: ['Opnames'],
+        tags: ['Kepala Gudang', 'Staf Gudang'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -81,7 +81,7 @@ export const opnameRoutes = new Elysia({ prefix: '/opnames' })
       requireRole: [...ROLES_OPNAME],
       detail: {
         summary: 'Input hitungan fisik barang (UC-15)',
-        tags: ['Opnames'],
+        tags: ['Kepala Gudang', 'Staf Gudang'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -107,7 +107,7 @@ export const opnameRoutes = new Elysia({ prefix: '/opnames' })
       requireRole: ['KEPALA_GUDANG'],
       detail: {
         summary: 'Finalisasi & sinkronisasi stok opname (UC-15, hanya Kepala)',
-        tags: ['Opnames'],
+        tags: ['Kepala Gudang'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -120,7 +120,7 @@ export const opnameRoutes = new Elysia({ prefix: '/opnames' })
       requireRole: [...ROLES_OPNAME],
       detail: {
         summary: 'Ringkasan sesi stok opname (UC-15)',
-        tags: ['Opnames'],
+        tags: ['Kepala Gudang', 'Staf Gudang'],
         security: [{ bearerAuth: [] }],
       },
     },

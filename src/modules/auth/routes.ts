@@ -26,7 +26,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
     },
     {
       body: loginBody,
-      detail: { summary: 'Login email + password (UC-01)', tags: ['Auth'] },
+      detail: { summary: 'Login email + password (UC-01)', tags: ['Publik'] },
     },
   )
   .get(
@@ -40,7 +40,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       requireAuth: true,
       detail: {
         summary: 'Profil user yang sedang login (UC-01)',
-        tags: ['Auth'],
+        tags: ['Semua'],
         security: [{ bearerAuth: [] }],
       },
     },

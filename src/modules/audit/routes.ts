@@ -22,7 +22,7 @@ export const auditRoutes = new Elysia()
       requireRole: ['ADMIN'],
       detail: {
         summary: 'Audit trail aktivitas (UC-07)',
-        tags: ['Audit'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -47,7 +47,7 @@ export const auditRoutes = new Elysia()
       requireRole: ['ADMIN'],
       detail: {
         summary: 'Log notifikasi (UC-07)',
-        tags: ['Audit'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },

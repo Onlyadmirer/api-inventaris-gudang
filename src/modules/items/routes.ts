@@ -40,7 +40,7 @@ export const itemRoutes = new Elysia({ prefix: '/items' })
       requireAuth: true,
       detail: {
         summary: 'Daftar & pencarian barang (UC-08)',
-        tags: ['Items'],
+        tags: ['Semua'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -53,7 +53,7 @@ export const itemRoutes = new Elysia({ prefix: '/items' })
       requireAuth: true,
       detail: {
         summary: 'Detail barang berdasarkan kode/SKU (UC-09)',
-        tags: ['Items'],
+        tags: ['Semua'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -73,10 +73,10 @@ export const itemRoutes = new Elysia({ prefix: '/items' })
     },
     {
       params: itemIdParams,
-      requireRole: ['ADMIN', 'KEPALA_GUDANG'],
+      requireRole: ['ADMIN'],
       detail: {
         summary: 'Generate QR code barang (UC-05)',
-        tags: ['Items'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -95,10 +95,10 @@ export const itemRoutes = new Elysia({ prefix: '/items' })
     },
     {
       body: qrBatchBody,
-      requireRole: ['ADMIN', 'KEPALA_GUDANG'],
+      requireRole: ['ADMIN'],
       detail: {
         summary: 'Generate QR code massal (UC-05)',
-        tags: ['Items'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -111,7 +111,7 @@ export const itemRoutes = new Elysia({ prefix: '/items' })
       requireAuth: true,
       detail: {
         summary: 'Detail barang (UC-08)',
-        tags: ['Items'],
+        tags: ['Semua'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -132,10 +132,10 @@ export const itemRoutes = new Elysia({ prefix: '/items' })
     },
     {
       body: createItemBody,
-      requireRole: ['ADMIN', 'KEPALA_GUDANG'],
+      requireRole: ['ADMIN'],
       detail: {
         summary: 'Tambah barang (UC-03)',
-        tags: ['Items'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -159,7 +159,7 @@ export const itemRoutes = new Elysia({ prefix: '/items' })
       requireRole: ['ADMIN'],
       detail: {
         summary: 'Atur batas stok minimum (UC-04)',
-        tags: ['Items'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -180,10 +180,10 @@ export const itemRoutes = new Elysia({ prefix: '/items' })
     {
       params: itemIdParams,
       body: updateItemBody,
-      requireRole: ['ADMIN', 'KEPALA_GUDANG'],
+      requireRole: ['ADMIN'],
       detail: {
         summary: 'Ubah barang (UC-03)',
-        tags: ['Items'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -203,10 +203,10 @@ export const itemRoutes = new Elysia({ prefix: '/items' })
     },
     {
       params: itemIdParams,
-      requireRole: ['ADMIN', 'KEPALA_GUDANG'],
+      requireRole: ['ADMIN'],
       detail: {
         summary: 'Hapus barang (UC-03)',
-        tags: ['Items'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },

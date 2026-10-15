@@ -35,10 +35,10 @@ const suffix = Date.now().toString(36)
 const createdScheduleIds: number[] = []
 const createdEmails: string[] = []
 
-const [kepalaUser] = await db
+const [adminUser] = await db
   .select()
   .from(users)
-  .where(eq(users.email, 'kepala@inventaris.test'))
+  .where(eq(users.email, 'admin@inventaris.test'))
   .limit(1)
 
 function request(method: string, path: string, options: { body?: unknown; token?: string } = {}) {
@@ -96,53 +96,53 @@ describe('B8 akses & validasi', () => {
     expect((await request('GET', '/schedules')).status).toBe(401)
   })
 
-  it('ADMIN & STAF dilarang -> 403', async () => {
-    const admin = await tokenFor('admin@inventaris.test')
-    const staf = await tokenFor('staf@inventaris.test')
-    expect((await request('GET', '/schedules', { token: admin })).status).toBe(403)
+  it('KEPALA_GUDANG & STAF dilarang -> 403', async () => {
+    const kepalaToken = await tokenFor('kepala@inventaris.test')
+    const stafToken = await tokenFor('staf@inventaris.test')
+    expect((await request('GET', '/schedules', { token: kepalaToken })).status).toBe(403)
     const validBody = {
       jenis_laporan: 'stok',
       frekuensi: 'harian',
       waktu_eksekusi: '08:30',
       email_penerima: `staf.${suffix}@inventaris.test`,
     }
-    expect((await request('POST', '/schedules', { token: staf, body: validBody })).status).toBe(403)
-    expect((await request('POST', '/schedules', { token: admin, body: validBody })).status).toBe(403)
+    expect((await request('POST', '/schedules', { token: stafToken, body: validBody })).status).toBe(403)
+    expect((await request('POST', '/schedules', { token: kepalaToken, body: validBody })).status).toBe(403)
   })
 
   it('validasi waktu & email -> 400', async () => {
-    const kepala = await tokenFor('kepala@inventaris.test')
-    expect((await createSchedule(kepala, { waktu_eksekusi: '25:00' })).status).toBe(400)
-    expect((await createSchedule(kepala, { waktu_eksekusi: '8:30' })).status).toBe(400)
-    expect((await createSchedule(kepala, { email_penerima: 'bukan-email' })).status).toBe(400)
-    expect((await createSchedule(kepala, { frekuensi: 'tahunan' })).status).toBe(400)
+    const admin = await tokenFor('admin@inventaris.test')
+    expect((await createSchedule(admin, { waktu_eksekusi: '25:00' })).status).toBe(400)
+    expect((await createSchedule(admin, { waktu_eksekusi: '8:30' })).status).toBe(400)
+    expect((await createSchedule(admin, { email_penerima: 'bukan-email' })).status).toBe(400)
+    expect((await createSchedule(admin, { frekuensi: 'tahunan' })).status).toBe(400)
   })
 })
 
 describe('B8 CRUD jadwal', () => {
   it('create -> 201, tersimpan, job terdaftar, ada next_run', async () => {
-    const kepala = await tokenFor('kepala@inventaris.test')
-    const { status, json } = await createSchedule(kepala)
+    const admin = await tokenFor('admin@inventaris.test')
+    const { status, json } = await createSchedule(admin)
 
     expect(status).toBe(201)
     expect(json.id_jadwal).toBeGreaterThan(0)
-    expect(json.user_id).toBe(kepalaUser!.id_user)
+    expect(json.user_id).toBe(adminUser!.id_user)
     expect(json.status_aktif).toBe(true)
     expect(json.next_run).not.toBeNull()
     expect(hasActiveJob(json.id_jadwal)).toBe(true)
   })
 
   it('create nonaktif -> tidak ada job', async () => {
-    const kepala = await tokenFor('kepala@inventaris.test')
-    const { json } = await createSchedule(kepala, { status_aktif: false })
+    const admin = await tokenFor('admin@inventaris.test')
+    const { json } = await createSchedule(admin, { status_aktif: false })
     expect(json.status_aktif).toBe(false)
     expect(json.next_run).toBeNull()
     expect(hasActiveJob(json.id_jadwal)).toBe(false)
   })
 
   it('list memuat jadwal yang dibuat', async () => {
-    const kepala = await tokenFor('kepala@inventaris.test')
-    const res = await request('GET', '/schedules?limit=100', { token: kepala })
+    const admin = await tokenFor('admin@inventaris.test')
+    const res = await request('GET', '/schedules?limit=100', { token: admin })
     expect(res.status).toBe(200)
     const json = (await res.json()) as any
     expect(json.meta.total).toBeGreaterThanOrEqual(1)
@@ -150,22 +150,22 @@ describe('B8 CRUD jadwal', () => {
   })
 
   it('update kosong -> 400, update menghidup/matikan job', async () => {
-    const kepala = await tokenFor('kepala@inventaris.test')
-    const { json } = await createSchedule(kepala)
+    const admin = await tokenFor('admin@inventaris.test')
+    const { json } = await createSchedule(admin)
     const id = json.id_jadwal
 
-    const empty = await request('PATCH', `/schedules/${id}`, { token: kepala, body: {} })
+    const empty = await request('PATCH', `/schedules/${id}`, { token: admin, body: {} })
     expect(empty.status).toBe(400)
 
     const off = await request('PATCH', `/schedules/${id}`, {
-      token: kepala,
+      token: admin,
       body: { status_aktif: false },
     })
     expect(off.status).toBe(200)
     expect(hasActiveJob(id)).toBe(false)
 
     const on = await request('PATCH', `/schedules/${id}`, {
-      token: kepala,
+      token: admin,
       body: { status_aktif: true, waktu_eksekusi: '09:15' },
     })
     expect(on.status).toBe(200)
@@ -174,21 +174,21 @@ describe('B8 CRUD jadwal', () => {
   })
 
   it('update id tidak ada -> 404', async () => {
-    const kepala = await tokenFor('kepala@inventaris.test')
+    const admin = await tokenFor('admin@inventaris.test')
     const res = await request('PATCH', '/schedules/99999999', {
-      token: kepala,
+      token: admin,
       body: { status_aktif: false },
     })
     expect(res.status).toBe(404)
   })
 
   it('delete menghapus baris & menghentikan job', async () => {
-    const kepala = await tokenFor('kepala@inventaris.test')
-    const { json } = await createSchedule(kepala)
+    const admin = await tokenFor('admin@inventaris.test')
+    const { json } = await createSchedule(admin)
     const id = json.id_jadwal
     expect(hasActiveJob(id)).toBe(true)
 
-    const res = await request('DELETE', `/schedules/${id}`, { token: kepala })
+    const res = await request('DELETE', `/schedules/${id}`, { token: admin })
     expect(res.status).toBe(200)
     expect(hasActiveJob(id)).toBe(false)
 
@@ -198,15 +198,15 @@ describe('B8 CRUD jadwal', () => {
       .where(eq(report_schedules.id_jadwal, id))
     expect(rows.length).toBe(0)
 
-    const again = await request('DELETE', `/schedules/${id}`, { token: kepala })
+    const again = await request('DELETE', `/schedules/${id}`, { token: admin })
     expect(again.status).toBe(404)
   })
 })
 
 describe('B8 runScheduleNow', () => {
   it('sukses -> kirim email berlampiran + catat notification_logs & activity_logs', async () => {
-    const kepala = await tokenFor('kepala@inventaris.test')
-    const { json } = await createSchedule(kepala, { jenis_laporan: 'stok', frekuensi: 'harian' })
+    const admin = await tokenFor('admin@inventaris.test')
+    const { json } = await createSchedule(admin, { jenis_laporan: 'stok', frekuensi: 'harian' })
     const id = json.id_jadwal
     const email = createdEmails[createdEmails.length - 1]!
 
@@ -224,7 +224,7 @@ describe('B8 runScheduleNow', () => {
       .from(notification_logs)
       .where(
         and(
-          eq(notification_logs.user_id, kepalaUser!.id_user),
+          eq(notification_logs.user_id, adminUser!.id_user),
           isNull(notification_logs.barang_id),
           like(notification_logs.pesan, 'Laporan stok%'),
         ),
@@ -246,8 +246,8 @@ describe('B8 runScheduleNow', () => {
   })
 
   it('email gagal -> status gagal + notification_logs gagal, tidak melempar', async () => {
-    const kepala = await tokenFor('kepala@inventaris.test')
-    const { json } = await createSchedule(kepala, { jenis_laporan: 'transaksi' })
+    const admin = await tokenFor('admin@inventaris.test')
+    const { json } = await createSchedule(admin, { jenis_laporan: 'transaksi' })
     const id = json.id_jadwal
 
     mailFails = true
@@ -262,7 +262,7 @@ describe('B8 runScheduleNow', () => {
       .from(notification_logs)
       .where(
         and(
-          eq(notification_logs.user_id, kepalaUser!.id_user),
+          eq(notification_logs.user_id, adminUser!.id_user),
           isNull(notification_logs.barang_id),
           like(notification_logs.pesan, 'Laporan transaksi%'),
         ),
@@ -290,12 +290,12 @@ afterAll(async () => {
       .delete(report_schedules)
       .where(inArray(report_schedules.id_jadwal, createdScheduleIds))
   }
-  if (kepalaUser) {
+  if (adminUser) {
     await db
       .delete(notification_logs)
       .where(
         and(
-          eq(notification_logs.user_id, kepalaUser.id_user),
+          eq(notification_logs.user_id, adminUser.id_user),
           isNull(notification_logs.barang_id),
           like(notification_logs.pesan, 'Laporan %'),
         ),

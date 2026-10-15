@@ -24,7 +24,7 @@ export const userRoutes = new Elysia({ prefix: '/users' })
       requireRole: ['ADMIN'],
       detail: {
         summary: 'Daftar akun pengguna (UC-02)',
-        tags: ['Users'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -48,7 +48,7 @@ export const userRoutes = new Elysia({ prefix: '/users' })
       requireRole: ['ADMIN'],
       detail: {
         summary: 'Tambah akun pengguna (UC-02)',
-        tags: ['Users'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -81,7 +81,7 @@ export const userRoutes = new Elysia({ prefix: '/users' })
       requireRole: ['ADMIN'],
       detail: {
         summary: 'Ubah akun pengguna (UC-02)',
-        tags: ['Users'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -105,7 +105,7 @@ export const userRoutes = new Elysia({ prefix: '/users' })
       requireRole: ['ADMIN'],
       detail: {
         summary: 'Aktifkan/nonaktifkan akun (UC-02)',
-        tags: ['Users'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },

@@ -22,7 +22,7 @@ export const preferenceRoutes = new Elysia({ prefix: '/preferences' })
       requireRole: ['KEPALA_GUDANG'],
       detail: {
         summary: 'Daftar preferensi notifikasi (UC-16)',
-        tags: ['Preferences'],
+        tags: ['Kepala Gudang'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -35,7 +35,7 @@ export const preferenceRoutes = new Elysia({ prefix: '/preferences' })
       requireRole: ['KEPALA_GUDANG'],
       detail: {
         summary: 'Ubah preferensi notifikasi (UC-16)',
-        tags: ['Preferences'],
+        tags: ['Kepala Gudang'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -52,7 +52,7 @@ export const notificationRoutes = new Elysia({ prefix: '/notifications' })
       requireRole: ['ADMIN', 'KEPALA_GUDANG'],
       detail: {
         summary: 'Inbox notifikasi in-app (UC-17)',
-        tags: ['Notifications'],
+        tags: ['Admin', 'Kepala Gudang'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -64,7 +64,7 @@ export const notificationRoutes = new Elysia({ prefix: '/notifications' })
       requireRole: ['ADMIN', 'KEPALA_GUDANG'],
       detail: {
         summary: 'Tandai semua notifikasi terbaca (UC-17)',
-        tags: ['Notifications'],
+        tags: ['Admin', 'Kepala Gudang'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -77,7 +77,7 @@ export const notificationRoutes = new Elysia({ prefix: '/notifications' })
       requireRole: ['ADMIN', 'KEPALA_GUDANG'],
       detail: {
         summary: 'Tandai notifikasi terbaca (UC-17)',
-        tags: ['Notifications'],
+        tags: ['Admin', 'Kepala Gudang'],
         security: [{ bearerAuth: [] }],
       },
     },

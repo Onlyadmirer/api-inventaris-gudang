@@ -18,7 +18,7 @@ export const categoryRoutes = new Elysia({ prefix: '/categories' })
       requireAuth: true,
       detail: {
         summary: 'Daftar kategori (UC-03)',
-        tags: ['Categories'],
+        tags: ['Semua'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -39,10 +39,10 @@ export const categoryRoutes = new Elysia({ prefix: '/categories' })
     },
     {
       body: createCategoryBody,
-      requireRole: ['ADMIN', 'KEPALA_GUDANG'],
+      requireRole: ['ADMIN'],
       detail: {
         summary: 'Tambah kategori (UC-03)',
-        tags: ['Categories'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -63,10 +63,10 @@ export const categoryRoutes = new Elysia({ prefix: '/categories' })
     {
       params: categoryIdParams,
       body: updateCategoryBody,
-      requireRole: ['ADMIN', 'KEPALA_GUDANG'],
+      requireRole: ['ADMIN'],
       detail: {
         summary: 'Ubah kategori (UC-03)',
-        tags: ['Categories'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -86,10 +86,10 @@ export const categoryRoutes = new Elysia({ prefix: '/categories' })
     },
     {
       params: categoryIdParams,
-      requireRole: ['ADMIN', 'KEPALA_GUDANG'],
+      requireRole: ['ADMIN'],
       detail: {
         summary: 'Hapus kategori (UC-03)',
-        tags: ['Categories'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },

@@ -21,10 +21,10 @@ export const scheduleRoutes = new Elysia({ prefix: '/schedules' })
     async ({ query }) => listSchedules(query.page ?? 1, query.limit ?? 20),
     {
       query: listSchedulesQuery,
-      requireRole: ['KEPALA_GUDANG'],
+      requireRole: ['ADMIN'],
       detail: {
         summary: 'Daftar jadwal laporan (UC-06)',
-        tags: ['Schedules'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -45,10 +45,10 @@ export const scheduleRoutes = new Elysia({ prefix: '/schedules' })
     },
     {
       body: createScheduleBody,
-      requireRole: ['KEPALA_GUDANG'],
+      requireRole: ['ADMIN'],
       detail: {
         summary: 'Tambah jadwal laporan (UC-06)',
-        tags: ['Schedules'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -69,10 +69,10 @@ export const scheduleRoutes = new Elysia({ prefix: '/schedules' })
     {
       params: scheduleIdParams,
       body: updateScheduleBody,
-      requireRole: ['KEPALA_GUDANG'],
+      requireRole: ['ADMIN'],
       detail: {
         summary: 'Ubah jadwal laporan (UC-06)',
-        tags: ['Schedules'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -92,10 +92,10 @@ export const scheduleRoutes = new Elysia({ prefix: '/schedules' })
     },
     {
       params: scheduleIdParams,
-      requireRole: ['KEPALA_GUDANG'],
+      requireRole: ['ADMIN'],
       detail: {
         summary: 'Hapus jadwal laporan (UC-06)',
-        tags: ['Schedules'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },

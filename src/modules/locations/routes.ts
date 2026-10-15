@@ -18,7 +18,7 @@ export const locationRoutes = new Elysia({ prefix: '/locations' })
       requireAuth: true,
       detail: {
         summary: 'Daftar lokasi (UC-03)',
-        tags: ['Locations'],
+        tags: ['Semua'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -39,10 +39,10 @@ export const locationRoutes = new Elysia({ prefix: '/locations' })
     },
     {
       body: createLocationBody,
-      requireRole: ['ADMIN', 'KEPALA_GUDANG'],
+      requireRole: ['ADMIN'],
       detail: {
         summary: 'Tambah lokasi (UC-03)',
-        tags: ['Locations'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -63,10 +63,10 @@ export const locationRoutes = new Elysia({ prefix: '/locations' })
     {
       params: locationIdParams,
       body: updateLocationBody,
-      requireRole: ['ADMIN', 'KEPALA_GUDANG'],
+      requireRole: ['ADMIN'],
       detail: {
         summary: 'Ubah lokasi (UC-03)',
-        tags: ['Locations'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -86,10 +86,10 @@ export const locationRoutes = new Elysia({ prefix: '/locations' })
     },
     {
       params: locationIdParams,
-      requireRole: ['ADMIN', 'KEPALA_GUDANG'],
+      requireRole: ['ADMIN'],
       detail: {
         summary: 'Hapus lokasi (UC-03)',
-        tags: ['Locations'],
+        tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
     },

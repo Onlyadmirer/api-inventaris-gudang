@@ -13,7 +13,7 @@ export const dashboardRoutes = new Elysia({ prefix: '/dashboard' })
       requireRole: ['ADMIN', 'KEPALA_GUDANG'],
       detail: {
         summary: 'Ringkasan dashboard (UC-13)',
-        tags: ['Dashboard'],
+        tags: ['Admin', 'Kepala Gudang'],
         security: [{ bearerAuth: [] }],
       },
     },

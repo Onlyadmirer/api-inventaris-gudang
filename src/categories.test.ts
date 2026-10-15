@@ -88,8 +88,8 @@ describe('UC-03 Kategori', () => {
     })
   })
 
-  it('KEPALA_GUDANG bisa mengubah kategori -> 200', async () => {
-    const token = await tokenFor('kepala@inventaris.test')
+  it('ADMIN bisa mengubah kategori -> 200', async () => {
+    const token = await tokenFor('admin@inventaris.test')
     const id = createdCategoryIds[0]
     const res = await request('PATCH', `/categories/${id}`, {
       token,
@@ -97,6 +97,16 @@ describe('UC-03 Kategori', () => {
     })
     expect(res.status).toBe(200)
     expect(((await res.json()) as Record<string, any>).deskripsi).toBe('diubah')
+  })
+
+  it('KEPALA_GUDANG tidak boleh mengubah kategori -> 403', async () => {
+    const token = await tokenFor('kepala@inventaris.test')
+    const id = createdCategoryIds[0]
+    const res = await request('PATCH', `/categories/${id}`, {
+      token,
+      body: { deskripsi: 'ditolak' },
+    })
+    expect(res.status).toBe(403)
   })
 
   it('hapus kategori yang masih dipakai barang -> 409', async () => {
