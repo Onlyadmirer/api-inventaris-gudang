@@ -67,6 +67,11 @@ export const app = new Elysia({ prefix: '/api' })
     },
     { detail: { summary: 'Health check', tags: ['Publik'] } },
   )
+  .get("/cronjob", () => {
+    return {
+      status: "ok"
+    }
+  })
 
 if (import.meta.main) {
   await loadActiveSchedules()
