@@ -79,4 +79,12 @@ if (import.meta.main) {
   console.log(`Backend berjalan di http://localhost:${port}`)
 }
 
+
+if (import.meta.main) {
+  await loadActiveSchedules()
+  app.listen(port)
+  console.log(`Backend berjalan di http://localhost:${port}`)
+}
+
+export default app
 export type App = typeof app
