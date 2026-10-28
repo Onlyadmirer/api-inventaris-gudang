@@ -19,7 +19,7 @@ import { loadActiveSchedules } from './modules/schedules/scheduler'
 
 const port = Number(process.env.PORT ?? 3000)
 
-export const app = new Elysia({ prefix: '/api' })
+const app = new Elysia({ prefix: '/api' })
   .use(errorPlugin)
   .use(authRoutes)
   .use(userRoutes)
