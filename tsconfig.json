@@ -15,7 +15,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noPropertyAccessFromIndexSignature": false,
-    "types": ["bun"]
+    "types": ["bun"],
+    "typeRoots": ["./node_modules/@types"]
   },
   "include": ["src", "drizzle.config.ts"]
 }

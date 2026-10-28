@@ -72,8 +72,17 @@ export const app = new Elysia({ prefix: '/api' })
       status: "ok"
     }
   })
+  .get(
+    '/',
+    () => ({ status: 'ok', service: 'inventaris-gudang-api' }),
+    { detail: { summary: 'Status API (tanpa database)', tags: ['Publik'] } },
+  )
 
-if (import.meta.main) {
+// Vercel Functions tidak mendukung app.listen(). Guard ini mencegah server
+// dijalankan (dan query jadwal saat cold start) ketika berjalan di Vercel.
+const isServerless = Boolean(process.env.VERCEL)
+
+if (import.meta.main && !isServerless) {
   await loadActiveSchedules()
   app.listen(port)
   console.log(`Backend berjalan di http://localhost:${port}`)
