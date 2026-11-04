@@ -1,4 +1,5 @@
 import { Elysia } from 'elysia'
+import { cors } from '@elysiajs/cors'
 import { openapi } from '@elysiajs/openapi'
 import { sql } from 'drizzle-orm'
 import { db } from './db'
@@ -20,6 +21,14 @@ import { loadActiveSchedules } from './modules/schedules/scheduler'
 const port = Number(process.env.PORT ?? 3000)
 
 const app = new Elysia({ prefix: '/api' })
+  .use(
+    cors({
+      origin: true,
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true,
+    }),
+  )
   .use(errorPlugin)
   .use(authRoutes)
   .use(userRoutes)
@@ -89,4 +98,3 @@ if (import.meta.main && !isServerless) {
 }
 
 export default app
-export type App = typeof app
