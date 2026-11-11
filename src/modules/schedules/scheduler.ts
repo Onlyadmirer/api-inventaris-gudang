@@ -8,6 +8,8 @@ import { exportReport, type ReportJenis } from '../reports/service'
 
 export type ScheduleRow = typeof report_schedules.$inferSelect
 
+export const TIMEZONE_WIB = 'Asia/Jakarta'
+
 const jobs = new Map<number, Cron>()
 
 function pad(value: number): string {
@@ -18,24 +20,38 @@ function ymd(date: Date): string {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
 }
 
+export function toWibDate(date = new Date()): Date {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: TIMEZONE_WIB,
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  }).formatToParts(date)
+  const y = Number(parts.find((p) => p.type === 'year')?.value)
+  const m = Number(parts.find((p) => p.type === 'month')?.value) - 1
+  const d = Number(parts.find((p) => p.type === 'day')?.value)
+  return new Date(y, m, d)
+}
+
 export type ReportPeriod = {
   dari: string
   sampai: string
 }
 
 export function buildPeriod(frekuensi: ScheduleRow['frekuensi'], now = new Date()): ReportPeriod {
+  const wibDate = toWibDate(now)
   if (frekuensi === 'harian') {
-    const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)
+    const yesterday = new Date(wibDate.getFullYear(), wibDate.getMonth(), wibDate.getDate() - 1)
     return { dari: ymd(yesterday), sampai: ymd(yesterday) }
   }
 
   if (frekuensi === 'mingguan') {
-    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6)
-    return { dari: ymd(start), sampai: ymd(now) }
+    const start = new Date(wibDate.getFullYear(), wibDate.getMonth(), wibDate.getDate() - 6)
+    return { dari: ymd(start), sampai: ymd(wibDate) }
   }
 
-  const firstPrevMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1)
-  const lastPrevMonth = new Date(now.getFullYear(), now.getMonth(), 0)
+  const firstPrevMonth = new Date(wibDate.getFullYear(), wibDate.getMonth() - 1, 1)
+  const lastPrevMonth = new Date(wibDate.getFullYear(), wibDate.getMonth(), 0)
   return { dari: ymd(firstPrevMonth), sampai: ymd(lastPrevMonth) }
 }
 
@@ -154,6 +170,7 @@ export function registerSchedule(row: ScheduleRow): void {
   const pattern = buildCronPattern(row.frekuensi, row.waktu_eksekusi)
   const job = new Cron(
     pattern,
+    { timezone: TIMEZONE_WIB, unref: true, catch: true },
     async () => {
       try {
         const current = await getScheduleRow(row.id_jadwal)
@@ -166,7 +183,6 @@ export function registerSchedule(row: ScheduleRow): void {
         console.error('Eksekusi jadwal gagal:', error)
       }
     },
-    { unref: true, catch: true },
   )
   jobs.set(row.id_jadwal, job)
 }
