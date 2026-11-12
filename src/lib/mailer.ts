@@ -27,7 +27,9 @@ function buildTransport() {
       port,
       secure: port === 465,
       auth: user ? { user, pass } : undefined,
-    }),
+      // Paksa IPv4 untuk menghindari delay atau ECONNREFUSED pada jaringan IPv6
+      family: 4,
+    } as any),
     from: process.env.SMTP_FROM ?? user ?? 'no-reply@inventaris.local',
   }
 }
