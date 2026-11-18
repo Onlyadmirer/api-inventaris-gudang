@@ -35,6 +35,38 @@ function buildTransport() {
 }
 
 export async function sendEmail(message: MailMessage): Promise<void> {
+  // 1. Jika ada RESEND_API_KEY, gunakan HTTP API (Port 443 HTTPS - 100% Lolos di Render / Vercel)
+  const resendApiKey = process.env.RESEND_API_KEY
+  if (resendApiKey) {
+    const from = process.env.RESEND_FROM || 'Inventaris Gudang <onboarding@resend.dev>'
+    const attachments = message.attachments?.map((att) => ({
+      filename: att.filename,
+      content: att.content.toString('base64'),
+    }))
+
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from,
+        to: [message.to],
+        subject: message.subject,
+        text: message.text,
+        attachments,
+      }),
+    })
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({})) as { message?: string }
+      throw new Error(`Resend API Error (${res.status}): ${err.message || res.statusText}`)
+    }
+    return
+  }
+
+  // 2. Fallback ke SMTP biasa (untuk pengembangan di Lokal)
   const { transport, from } = buildTransport()
   await transport.sendMail({
     from,
