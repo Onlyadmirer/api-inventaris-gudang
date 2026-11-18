@@ -13,6 +13,7 @@ import {
   listSchedules,
   updateSchedule,
 } from './service'
+import { runScheduleNow } from './scheduler'
 
 export const scheduleRoutes = new Elysia({ prefix: '/schedules' })
   .use(authPlugin)
@@ -95,6 +96,22 @@ export const scheduleRoutes = new Elysia({ prefix: '/schedules' })
       requireRole: ['ADMIN'],
       detail: {
         summary: 'Hapus jadwal laporan (UC-06)',
+        tags: ['Admin'],
+        security: [{ bearerAuth: [] }],
+      },
+    },
+  )
+  .post(
+    '/:id/run',
+    async ({ params }) => {
+      const result = await runScheduleNow(params.id)
+      return result
+    },
+    {
+      params: scheduleIdParams,
+      requireRole: ['ADMIN'],
+      detail: {
+        summary: 'Jalankan jadwal sekarang untuk testing (UC-06)',
         tags: ['Admin'],
         security: [{ bearerAuth: [] }],
       },
