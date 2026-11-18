@@ -76,9 +76,9 @@ export const app = new Elysia({ prefix: '/api' })
     },
     { detail: { summary: 'Health check', tags: ['Publik'] } },
   )
-  .get("/cronjob", () => {
+  .get('/cronjob', () => {
     return {
-      status: "ok"
+      status: 'ok',
     }
   })
   .get(
