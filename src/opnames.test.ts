@@ -76,10 +76,12 @@ async function createOpname(token: string, keterangan = 'Opname uji'): Promise<n
 }
 
 describe('B5 opname - akses', () => {
-  it('ADMIN dilarang -> 403', async () => {
+  it('ADMIN boleh membuat sesi draft -> 201', async () => {
     const token = await tokenFor('admin@inventaris.test')
-    const res = await request('POST', '/opnames', { token, body: {} })
-    expect(res.status).toBe(403)
+    const res = await request('POST', '/opnames', { token, body: { keterangan: 'Sesi admin' } })
+    expect(res.status).toBe(201)
+    const json = (await res.json()) as Record<string, any>
+    createdOpnameIds.push(json.id_opname)
   })
 
   it('STAF membuat sesi draft -> 201', async () => {

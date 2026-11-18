@@ -10,8 +10,7 @@ import {
 } from './model'
 import { addOpnameDetail, createOpname, finalizeOpname, getOpname, listOpnames } from './service'
 
-const ROLES_OPNAME = ['KEPALA_GUDANG', 'STAF_GUDANG'] as const
-const ROLES_OPNAME_READ = ['ADMIN', 'KEPALA_GUDANG', 'STAF_GUDANG'] as const
+const ROLES_OPNAME = ['ADMIN', 'KEPALA_GUDANG', 'STAF_GUDANG'] as const
 
 export const opnameRoutes = new Elysia({ prefix: '/opnames' })
   .use(authPlugin)
@@ -26,7 +25,7 @@ export const opnameRoutes = new Elysia({ prefix: '/opnames' })
     },
     {
       query: listOpnamesQuery,
-      requireRole: [...ROLES_OPNAME_READ],
+      requireRole: [...ROLES_OPNAME],
       detail: {
         summary: 'Daftar sesi stok opname (UC-15)',
         tags: ['Admin', 'Kepala Gudang', 'Staf Gudang'],
@@ -105,10 +104,10 @@ export const opnameRoutes = new Elysia({ prefix: '/opnames' })
     {
       params: opnameIdParams,
       body: finalizeBody,
-      requireRole: ['KEPALA_GUDANG'],
+      requireRole: ['ADMIN', 'KEPALA_GUDANG'],
       detail: {
-        summary: 'Finalisasi & sinkronisasi stok opname (UC-15, hanya Kepala)',
-        tags: ['Kepala Gudang'],
+        summary: 'Finalisasi & sinkronisasi stok opname (UC-15, Admin & Kepala)',
+        tags: ['Admin', 'Kepala Gudang'],
         security: [{ bearerAuth: [] }],
       },
     },
@@ -118,7 +117,7 @@ export const opnameRoutes = new Elysia({ prefix: '/opnames' })
     async ({ params }) => getOpname(params.id),
     {
       params: opnameIdParams,
-      requireRole: [...ROLES_OPNAME_READ],
+      requireRole: [...ROLES_OPNAME],
       detail: {
         summary: 'Ringkasan sesi stok opname (UC-15)',
         tags: ['Admin', 'Kepala Gudang', 'Staf Gudang'],
